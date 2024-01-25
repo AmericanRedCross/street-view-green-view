@@ -1,0 +1,6 @@
+# local package
+-e .
+
+fiona
+shapely
+pyproj
