@@ -1,4 +1,7 @@
-import argparse
+"""Rewrite of createPoints.py from the mittrees/Treepedia_Public project.
+See: https://github.com/mittrees/Treepedia_Public/blob/master/Treepedia/createPoints.py
+"""
+
 from pathlib import Path
 
 try:
