@@ -1,6 +1,11 @@
 # local package
 -e .
 
-fiona
+folium
+geopandas
+mapclassify
+matplotlib
+numpy
 shapely
-pyproj
+typer
+typing_extensions; python_version<'3.9'
