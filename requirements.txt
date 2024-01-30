@@ -3,8 +3,10 @@
 
 folium
 geopandas
+jupyterlab
 mapclassify
 matplotlib
+notebook
 numpy
 shapely
 typer
