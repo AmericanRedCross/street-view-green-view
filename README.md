@@ -15,9 +15,9 @@ This project aims to create tools for mapping tree canopy. Inspired by the [Tree
     ```bash
     pip install -r requirements.txt
     ```
-    - You can use the shortcut command `make requirements`.
+    - You can use the shortcut command `make requirements` to do the same thing.
 3. Put your raw OpenStreetMaps road vector data in `data/raw`.
-    - Your raw data should be geospatial vector features of type `LineString`. The features almost must include standard OpenStreetMap keys `osm_id` and `highway`.
+    - Your raw data should be geospatial vector features of type `LineString`. The features must include standard OpenStreetMap keys `osm_id` and `highway`.
     - For example, download [`Three_Rivers_Michigan_USA_line.zip`](https://drive.google.com/file/d/1fpI4I5KP2WyVD5PeytW_hoXZswOt0dwA/view?usp=drive_link) to `data/raw/Three_Rivers_Michigan_USA_line.zip`. Note that this Google Drive link is only accessible to approved project members.
 
 ### 1. Sample points from roads data
