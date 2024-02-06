@@ -1,6 +1,31 @@
 # street-view-green-view
 
-This project aims to create tools for mapping tree canopy. Inspired by the [Treepedia project](https://github.com/mittrees/Treepedia_Public) from [MIT Senseable City Lab](https://senseable.mit.edu/).
+## Project description
+
+### Goal
+
+We want to automate mapping of tree canopy cover from street level imagery (SLI) to create an informative layer for exploring which areas of a city might be at greater risk during future heat waves and for engaging people in discussions about green and nature-based solutions for climate adaptation. 
+
+### Project inspiration
+
+This project was inspired by the [Treepedia project](https://github.com/mittrees/Treepedia_Public) from [MIT Senseable City Lab](https://senseable.mit.edu/). Treepedia aimed to raise a proactive awareness of urban vegetation improvement, using computer vision techniques applied to Google Street View images. Treepedia measured and mapped the amount of vegetation cover along a city's streets by computing the Green View Index (GVI) on Google Street View (GSV) panoramas. The method considered the obstruction of tree canopies and classified the images accordingly.
+
+We plan to use crowd-sourced, open available imagery uploaded to [Mapillary](https://www.mapillary.com/) instead of GSV panoramas. This will give us greater control over the recency of the images and the geographic coverage of the images, as well as lowering costs. 
+
+Our first workflow will mirror Treepedia's GVI; however, we will explore additional analysis methods including machine learning options that have been developed since 2017 when Treepedia was released.
+
+### Why street level imagery (SLI)?
+
+Satellite imagery is a well-known source of data, but launching a satellite is a costly endeavor and there are limits to what we can interpret from it. SLI provides an accessible way to gather images from a different perspective with exciting implications for humanitarians. 
+- Effective hardware for SLI is no longer limited to vehicle-top rigs costing tens of thousands of dollars like those used by Google for their Street View service. There are a variety of options for high quality digital action cameras at a reasonable price that are durable, rugged, can capture at a frequent interval, and can automatically tag images with GPS coordinates. 
+- There are more powerful computing resources, better data storage and transfer options, and innovations in algorithms and machine learning tools are making it easier and more accessible to quickly collect data, process large amounts of data, and automate extraction of insights. 
+- There is a growing ecosystem of open tools and open data for SLI that organizations can use, build on, and contribute to.
+
+### Contributing
+
+This project is a collaboration with [Civic Tech DC](https://civictechdc.org/).
+
+If you are interested in joining the project, please check out [`CONTRIBUTING.md`](CONTRIBUTING.md).
 
 ## Usage
 
