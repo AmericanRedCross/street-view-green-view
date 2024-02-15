@@ -6,6 +6,9 @@ geopandas
 jupyterlab
 mapclassify
 matplotlib
+mapillary
+python-dotenv
+requests
 notebook
 numpy
 shapely
