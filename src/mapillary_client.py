@@ -1,5 +1,6 @@
 from os import getenv, getcwd
 import logging
+from multiprocessing import Pool
 from pathlib import Path
 from mapillary import interface as mly
 from requests import get, RequestException
@@ -32,9 +33,11 @@ class MapillaryClient:
                       longitude)
         self.log.debug(image_ids)
 
-        return list(map(lambda img: self.download_image(img), image_ids))
+        with Pool() as pool:
+            return pool.map(self.download_image, image_ids)
 
     def download_image(self, image_id: int) -> Path:
+        mly.set_access_token(self.access_token)
         self.log.info("%s.%s: %s",
                       self.__class__.__name__,
                       self.download_image.__name__,
