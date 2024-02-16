@@ -10,9 +10,9 @@ except ImportError:
     # For Python <3.9
     from typing_extensions import Annotated
 
+import geopandas as gpd
 import numpy as np
 import shapely
-import geopandas as gpd
 import typer
 
 DEFAULT_MINI_DIST = 20.0  # meters

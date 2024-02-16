@@ -32,9 +32,15 @@ clean:
 	find . -type f -name "*.py[co]" -delete
 	find . -type d -name "__pycache__" -delete
 
-## Lint using flake8
+## Format using ruff
+format:
+	ruff format src
+	ruff check src --fix
+
+## Lint using ruff
 lint:
-	flake8 src
+	ruff format --check src
+	ruff check src
 
 ## Set up python interpreter environment
 create_environment:
