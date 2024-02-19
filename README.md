@@ -54,10 +54,10 @@ The first step is to sample points along the roads in your provided data. You ca
 For example, if you're using the `Three_Rivers_Michigan_USA_line.zip` data mentioned in the "Setup" section above:
 
 ```bash
-python -m src.create_points data/raw/Three_Rivers_Michigan_USA_line.zip data/interim/Three_Rivers_Michigan_USA_points.shz
+python -m src.create_points data/raw/Three_Rivers_Michigan_USA_line.zip data/interim/Three_Rivers_Michigan_USA_points.gpkg
 ```
 
-This will write out a zipped shapefile containing the sampled points to `data/interim/Three_Rivers_Michigan_USA_points.shz`.
+This will write out a zipped shapefile containing the sampled points to `data/interim/Three_Rivers_Michigan_USA_points.gpkg`. The input and output formats can be any vector-based spatial data format [supported by geopandas](https://geopandas.org/en/stable/docs/user_guide/io.html), such as shapefiles, GeoJSON, and GeoPackage. The output format is automatically inferred from the file extension.
 
 #### Advanced usage
 
