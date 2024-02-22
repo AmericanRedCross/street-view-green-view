@@ -2,6 +2,26 @@
 
 _...Work in progress..._
 
+## Development
+
+### Code style
+
+This project uses [Ruff](https://docs.astral.sh/ruff/) for linting and automatic code formatting.
+
+You can run linting with the following shell commands or use the `make lint` shortcut:
+
+```bash
+ruff format --check src
+ruff check src
+```
+
+To format, run the following shell commands or `make format`:
+
+```bash
+ruff format src
+ruff check src --fix
+```
+
 ## For maintainers
 
 ### Checkout a PR branch from a fork

@@ -1,0 +1,31 @@
+[build-system]
+requires = ["flit_core >=3.2,<4"]
+build-backend = "flit_core.buildapi"
+
+[project]
+name = "src"
+version = "0.1.0"
+description = "Mapping tree canopy cover from street level imagery."
+readme = "README.md"
+requires-python = ">=3.8"
+license = { file = "LICENSE" }
+authors = [{ name = "The American National Red Cross" }]
+classifiers = [
+]
+
+## TOOLS ##
+
+[tool.ruff]
+src = ["src/**/*.py"]
+
+[tool.ruff.lint]
+select = [
+  "E", # Pyflakes
+  "F", # Pycodestyle
+  "I", # isort
+]
+unfixable = ["F"]
+
+[tool.ruff.lint.isort]
+known-first-party = ["src"]
+force-sort-within-sections = true

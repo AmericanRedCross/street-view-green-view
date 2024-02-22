@@ -8,6 +8,7 @@ mapclassify
 matplotlib
 notebook
 numpy
+ruff
 shapely
 typer
 typing_extensions; python_version<'3.9'
