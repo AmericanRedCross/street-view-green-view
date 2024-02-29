@@ -114,11 +114,7 @@ def main(
     ],
     points_file: Annotated[
         Path,
-        Argument(
-            help=(
-                "Path to Input Points File"
-            )
-        ),
+        Argument(help=("Path to Input Points File")),
     ],
     image_path: Annotated[
         Path,
