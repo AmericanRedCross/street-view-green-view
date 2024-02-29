@@ -38,7 +38,7 @@ If you are interested in joining the project, please check out [`CONTRIBUTING.md
      - You can use the shortcut command `make create_environment`.
 2. Install requirements.
     ```bash
-    pip install -r requirements.txt
+    pip install .
     ```
     - You can use the shortcut command `make requirements` to do the same thing.
 3. Put your raw OpenStreetMaps road vector data in `data/raw`.
@@ -83,10 +83,7 @@ Both the input files and output files support any file formats that geopandas su
     │                         the creator's initials, and a short `-` delimited description, e.g.
     │                         `1.0-jqp-initial-data-exploration`.
     │
-    ├── requirements.txt   <- The requirements file for reproducing the analysis environment, e.g.
-    │                         generated with `pip freeze > requirements.txt`
-    │
-    ├── setup.py           <- makes project pip installable (pip install -e .) so src can be imported
+    ├── pyproject.toml     <- Single source of truth for dependencies, build system, etc
     └── src                <- Source code for use in this project.
         └── __init__.py    <- Makes src a Python module
 
