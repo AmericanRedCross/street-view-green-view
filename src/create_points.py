@@ -96,7 +96,7 @@ def create_points(gdf: gpd.GeoDataFrame, mini_dist: float = DEFAULT_MINI_DIST):
     if not (gdf.geom_type == "LineString").all():
         raise ValueError("Input GeoDataFrame must contain only LineString features.")
     # Drop metadata other than 'osm_id'
-    gdf = gdf[["osm_id", "geometry"]]
+    gdf = gdf[["osm_id", "highway", "geometry"]]
     # EPSG:3857 is pseudo WGS84 with unit in meters
     gdf = gdf.to_crs("EPSG:3857")
     # Interpolate along lines and explode
