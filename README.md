@@ -36,6 +36,7 @@ If you are interested in joining the project, please check out [`CONTRIBUTING.md
 
 1. Create a Python virtual environment.
      - You can use the shortcut command `make create_environment`.
+     - The log will tell you how to activate the environment. Do so with: `source .venv/bin/activate`
 2. Install requirements.
     ```bash
     pip install -r requirements.txt
