@@ -19,7 +19,7 @@ endif
 #################################################################################
 
 ## Install Python Dependencies
-requirements: test_environment
+requirements: 
 	$(PYTHON_INTERPRETER) -m pip install -U pip setuptools wheel
 	$(PYTHON_INTERPRETER) -m pip install -r requirements.txt
 
@@ -59,10 +59,6 @@ else
 	@bash -c "source `which virtualenvwrapper.sh`;mkvirtualenv $(PROJECT_NAME) --python=$(PYTHON_INTERPRETER)"
 	@echo ">>> New virtualenv created. Activate with:\nworkon $(PROJECT_NAME)"
 endif
-
-## Test python environment is setup correctly
-test_environment:
-	$(PYTHON_INTERPRETER) test_environment.py
 
 #################################################################################
 # PROJECT RULES                                                                 #
