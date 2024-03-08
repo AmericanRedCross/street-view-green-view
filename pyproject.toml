@@ -22,7 +22,11 @@ dependencies = [
   "ruff",
   "requests",
   "shapely",
-  "typer"
+  "typer",
+  "pandas",
+  "geopy",
+  "tqdm",
+  "python-dotenv"
 ]
 
 ## TOOLS ##
