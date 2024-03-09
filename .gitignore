@@ -1,3 +1,6 @@
+# .env file has secrets
+.env
+
 # exclude data from source control by default
 data/
 

@@ -44,6 +44,8 @@ If you are interested in joining the project, please check out [`CONTRIBUTING.md
 3. Put your raw OpenStreetMaps road vector data in `data/raw`.
     - Your raw data should be geospatial vector features of type `LineString`. The features must include standard OpenStreetMap keys `osm_id` and `highway`.
     - For example, download [`Three_Rivers_Michigan_USA_line.zip`](https://drive.google.com/file/d/1fpI4I5KP2WyVD5PeytW_hoXZswOt0dwA/view?usp=drive_link) to `data/raw/Three_Rivers_Michigan_USA_line.zip`. Note that this Google Drive link is only accessible to approved project members.
+4. Make a copy of the `.env.example` file, removing the `.example` from the end of the filename.
+    - To download images from [Mapillary](https://www.mapillary.com/) you will need to create a (free) account and replace `MY_MAPILLARY_CLIENT_TOKEN` in the `.env` file with your own token. See the "Setting up API access and obtaining a client token" section on this [Mapillary help page](https://help.mapillary.com/hc/en-us/articles/360010234680-Accessing-imagery-and-data-through-the-Mapillary-API). You only need to enable READ access scope on your token.
 
 ### 1. Sample points from roads data
 
@@ -78,10 +80,9 @@ We want to fetch a 360 image for each sampled point. You can use the [`mapillary
 For example, if you're continuing from the example in previous steps and already generated a `Three_Rivers_Michigan_USA_points.gpkg` file:
 
 ```bash
-python -m src.mapillary "[MAPILLARY_CLIENT_TOKEN]" data/interim/Three_Rivers_Michigan_USA_points.gpkg data/interim/images/
+python -m src.mapillary data/interim/Three_Rivers_Michigan_USA_points.gpkg data/raw/mapillary/
 ```
 
-To download images from [Mapillary](https://www.mapillary.com/) you will need to create a (free) account and replace `[MAPILLARY_CLIENT_TOKEN]` with your own token. See the "Setting up API access and obtaining a client token" section on this [Mapillary help page](https://help.mapillary.com/hc/en-us/articles/360010234680-Accessing-imagery-and-data-through-the-Mapillary-API). You only need to enable READ access scope on your token.
 
 ## Project Organization
 
