@@ -13,6 +13,22 @@ authors = [{ name = "The American National Red Cross" }]
 classifiers = [
 ]
 
+dependencies = [
+  "folium",
+  "geopandas",
+  "mapclassify",
+  "matplotlib",
+  "numpy",
+  "ruff",
+  "requests",
+  "shapely",
+  "typer",
+  "pandas",
+  "geopy",
+  "tqdm",
+  "python-dotenv"
+]
+
 ## TOOLS ##
 
 [tool.ruff]
