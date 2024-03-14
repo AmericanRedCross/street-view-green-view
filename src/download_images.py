@@ -35,7 +35,7 @@ class Mapillary:
             "https://",
             HTTPAdapter(max_retries=3),
         )
-        self.downloaded_images = np.array([], dtype=str)
+        self.downloaded_images = set()
 
     def get_image_from_coordinates(self, latitude: int, longitude: int) -> dict:
         log.debug("Get Image From Coordinates: %s, %s", latitude, longitude)
@@ -74,7 +74,7 @@ class Mapillary:
         closest_distance = np.inf
 
         for i, image in enumerate(
-            filter(lambda img: not np.isin(img["id"], self.downloaded_images), images)
+            filter(lambda img: img["id"] not in self.downloaded_images, images)
         ):
             image_coordinates = (
                 image["geometry"]["coordinates"][1],
@@ -90,12 +90,12 @@ class Mapillary:
         image = images[closest]
         log.debug("Closest Image: %s", image["id"])
         results["image_id"] = image["id"]
-        np.append(self.downloaded_images, image["id"])
         results["image_lat"] = image["geometry"]["coordinates"][1]
         results["image_lon"] = image["geometry"]["coordinates"][0]
         results["residual"] = closest_distance.m
         image_url = image["thumb_original_url"]
         results["image_path"] = self._download_image(image_url, results["image_id"])
+        self.downloaded_images.add(results["image_id"])
 
         return results
 

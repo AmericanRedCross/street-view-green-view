@@ -73,14 +73,14 @@ Both the input files and output files support any file formats that geopandas su
 
 ### 2. Download an image for each point
 
-We want to fetch a 360 image for each sampled point. You can use the [`mapillary.py`](./src/mapillary.py) script to find the closest image to each point and download it to local file storage.
+We want to fetch a 360 image for each sampled point. You can use the [`download_images.py`](./src/download_images.py) script to find the closest image to each point and download it to local file storage.
 
 #### Example
 
 For example, if you're continuing from the example in previous steps and already generated a `Three_Rivers_Michigan_USA_points.gpkg` file:
 
 ```bash
-python -m src.mapillary data/interim/Three_Rivers_Michigan_USA_points.gpkg data/raw/mapillary/
+python -m src.download_images data/interim/Three_Rivers_Michigan_USA_points.gpkg data/raw/mapillary
 ```
 
 
