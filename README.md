@@ -39,7 +39,7 @@ If you are interested in joining the project, please check out [`CONTRIBUTING.md
      - The log will tell you how to activate the environment. Do so with: `source .venv/bin/activate`
 2. Install requirements.
     ```bash
-    pip install .
+    pip install -e .
     ```
     - You can use the shortcut command `make requirements` to do the same thing.
 3. Put your raw OpenStreetMaps road vector data in `data/raw`.
