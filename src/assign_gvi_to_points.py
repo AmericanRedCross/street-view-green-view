@@ -43,16 +43,16 @@ def get_gvi_score(image_path):
 
 
 @app.command()
-def main(image_directory, interim_data, output_directory):
+def main(image_directory, interim_data, output_file):
     """
 
     Args:
             image_directory: directory path for folder holding Mapillary images
             interim_data: file holding interim data (output from create_points.py)
-            output_file: directory path to save GeoPackage output to
+            output_file: file to save GeoPackage output to (provide full path)
 
     Returns:
-            GeoPackage containing a `gvi_scores` point layer
+            File containing point locations with associated Green View score
 
     """
     # Check image directory exists
@@ -74,12 +74,6 @@ def main(image_directory, interim_data, output_directory):
         pass
     else:
         raise Exception("Expected point data in interim data file but none found")
-
-    # Check output directory exists
-    if os.path.exists(output_directory):
-        pass
-    else:
-        raise ValueError("Output directory could not be found")
 
     # Make an empty dataframe to hold the data
     df = pd.DataFrame({"filename": [], "gvi_score": []})
@@ -106,9 +100,7 @@ def main(image_directory, interim_data, output_directory):
     # Print how many records were matched on each side
 
     # Export as GPKG
-    gdf.to_file(
-        os.path.join(output_directory, "image_points_with_gvi.gpkg"), layer="gvi_scores"
-    )
+    gdf.to_file(output_file)
 
 
 if __name__ == "__main__":
