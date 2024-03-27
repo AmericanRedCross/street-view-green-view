@@ -93,10 +93,11 @@ def create_points(gdf: gpd.GeoDataFrame, mini_dist: float = DEFAULT_MINI_DIST):
     Returns:
         geopandas.GeoDataFrame: new linestrings with interpolated points
     """
-    if (gdf.geometry.isna()).any(): 
+    if (gdf.geometry.isna()).any():
         raise ValueError(
-            "Input GeoDataFrame contains null geometries. Rerun with --drop-null to exclude these features."
-            )
+            "Input GeoDataFrame contains null geometries. "
+            "Rerun with --drop-null to exclude these features."
+        )
     if not (gdf.geom_type == "LineString").all():
         raise ValueError("Input GeoDataFrame must contain only LineString features.")
     # Drop metadata other than 'osm_id'
@@ -135,18 +136,18 @@ def main(
         float, typer.Option(help="Distance in meters between interpolated points.")
     ] = DEFAULT_MINI_DIST,
     drop_null: Annotated[
-        bool, 
+        bool,
         typer.Option(
             "--drop-null",
-            help="Set whether features with null " 
-            "geometries should be removed")
+            help="Set whether features with null geometries should be removed",
+        ),
     ] = False,
 ):
     gdf = gpd.read_file(in_file)
     gdf = remove_highways(gdf)
-    if drop_null: 
+    if drop_null:
         gdf = gdf[~gdf.geometry.isna()]
-    else: 
+    else:
         pass
     gdf = create_points(gdf, mini_dist=mini_dist)
     gdf.to_file(out_file)
