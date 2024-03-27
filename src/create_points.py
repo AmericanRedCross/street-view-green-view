@@ -94,7 +94,9 @@ def create_points(gdf: gpd.GeoDataFrame, mini_dist: float = DEFAULT_MINI_DIST):
         geopandas.GeoDataFrame: new linestrings with interpolated points
     """
     if (gdf.geometry.isna()).any(): 
-        raise ValueError("Input GeoDataFrame contains null geometries. Rerun with --drop_null to exclude these features.")
+        raise ValueError(
+            "Input GeoDataFrame contains null geometries. Rerun with --drop_null to exclude these features."
+            )
     if not (gdf.geom_type == "LineString").all():
         raise ValueError("Input GeoDataFrame must contain only LineString features.")
     # Drop metadata other than 'osm_id'
