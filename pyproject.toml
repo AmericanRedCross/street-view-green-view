@@ -26,7 +26,10 @@ dependencies = [
   "pandas",
   "geopy",
   "tqdm",
-  "python-dotenv"
+  "python-dotenv", 
+  "os", 
+  "scikit-image", 
+  "opencv-python"
 ]
 
 ## TOOLS ##
