@@ -95,7 +95,7 @@ def create_points(gdf: gpd.GeoDataFrame, mini_dist: float = DEFAULT_MINI_DIST):
     """
     if (gdf.geometry.isna()).any(): 
         raise ValueError(
-            "Input GeoDataFrame contains null geometries. Rerun with --drop_null to exclude these features."
+            "Input GeoDataFrame contains null geometries. Rerun with --drop-null to exclude these features."
             )
     if not (gdf.geom_type == "LineString").all():
         raise ValueError("Input GeoDataFrame must contain only LineString features.")
