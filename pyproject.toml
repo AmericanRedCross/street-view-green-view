@@ -27,7 +27,6 @@ dependencies = [
   "geopy",
   "tqdm",
   "python-dotenv", 
-  "os", 
   "scikit-image", 
   "opencv-python"
 ]
