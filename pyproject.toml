@@ -28,7 +28,8 @@ dependencies = [
   "tqdm",
   "python-dotenv", 
   "scikit-image", 
-  "opencv-python"
+  "opencv-python",
+  "stamina"
 ]
 
 ## TOOLS ##
