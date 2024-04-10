@@ -84,6 +84,27 @@ For example, if you're continuing from the example in previous steps and already
 python -m src.download_images data/interim/Three_Rivers_Michigan_USA_points.gpkg data/raw/mapillary
 ```
 
+### 3. Assign a Green View score to each image/feature
+
+Now that we have a point feature for each image, we want to calculate a Green View 
+Index (GVI) score for each image and assign that score to the relevant point feature. 
+We can use the [`assign_gvi_to_points.py`]('./src/assign_gvi_to_points.py') script 
+for this. 
+
+For more information on how GVI is calculated, see Li et al. (2015), 
+[_Who lives in greener neighborhoods?_](https://doi.org/10.1016/j.ufug.2015.07.006), 
+Urban Forestry & Urban Greening 14, pp.751--759.
+
+#### Example
+
+This example follows from the files and directories created in previous steps and 
+saves an output to a new file. 
+
+```bash
+python -m src.assign_gvi_to_points /data/raw/mapillary /data/interim/Three_Rivers_Michigan_USA_points.gpkg /data/processed/Three_Rivers_GVI.gpkg
+```
+
+
 
 ## Project Organization
 
