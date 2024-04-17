@@ -7,9 +7,10 @@ import geopandas as gpd
 from geopy.distance import ELLIPSOIDS, distance
 import numpy as np
 from pandas import Series
-from requests import Session
-from requests.adapters import HTTPAdapter
-from requests.exceptions import HTTPError, RetryError
+import requests
+from requests.exceptions import HTTPError
+from stamina import retry
+from tenacity import RetryError
 from tqdm.contrib.concurrent import thread_map
 from typer import Argument, Option, Typer
 
@@ -30,13 +31,9 @@ class Mapillary:
         self.access_token = access_token
         self.basepath = basepath
         self.basepath.mkdir(parents=True, exist_ok=True)
-        self.client = Session()
-        self.client.mount(
-            "https://",
-            HTTPAdapter(max_retries=3),
-        )
         self.downloaded_images = set()
 
+    @retry(on=HTTPError, attempts=3)
     def get_image_from_coordinates(self, latitude: int, longitude: int) -> dict:
         log.debug("Get Image From Coordinates: %s, %s", latitude, longitude)
         results = {
@@ -45,22 +42,19 @@ class Mapillary:
             "residual": None,
             "image_id": None,
             "image_path": None,
+            "error": None,
         }
 
-        try:
-            response = self.client.get(
-                self.url,
-                params={
-                    "access_token": self.access_token,
-                    "fields": "id,thumb_original_url,geometry",
-                    "is_pano": "true",
-                    "bbox": self._bounds(latitude, longitude),
-                },
-            )
-            response.raise_for_status()
-        except HTTPError or RetryError as e:
-            log.error(e)
-            return results
+        response = requests.get(
+            self.url,
+            params={
+                "access_token": self.access_token,
+                "fields": "id,thumb_original_url,geometry",
+                "is_pano": "true",
+                "bbox": self._bounds(latitude, longitude),
+            },
+        )
+        response.raise_for_status()
 
         images = response.json()["data"]
         log.debug("Successfully Retrieved Image Data: %s", images)
@@ -94,7 +88,10 @@ class Mapillary:
         results["image_lon"] = image["geometry"]["coordinates"][0]
         results["residual"] = closest_distance.m
         image_url = image["thumb_original_url"]
-        results["image_path"] = self._download_image(image_url, results["image_id"])
+        try:
+            results["image_path"] = self._download_image(image_url, results["image_id"])
+        except HTTPError or RetryError as e:
+            results["error"] = e.__class__.__name__
         self.downloaded_images.add(results["image_id"])
 
         return results
@@ -106,14 +103,11 @@ class Mapillary:
         top = latitude + 10 / 111_111
         return f"{left},{bottom},{right},{top}"
 
+    @retry(on=HTTPError, attempts=3)
     def _download_image(self, image_url, image_id) -> Optional[Path]:
         log.debug("Downloading Image: %s", image_id)
-        try:
-            response = self.client.get(image_url, stream=True)
-            response.raise_for_status()
-        except HTTPError or RetryError as e:
-            log.error(e)
-            return None
+        response = requests.get(image_url, stream=True)
+        response.raise_for_status()
         image_content = response.content
         log.debug("Successfully Retrieved Image: %s", image_id)
         image_path = Path(self.basepath, f"{image_id}.jpeg")
@@ -144,25 +138,35 @@ def main(
 
     mapillary = Mapillary(getenv("MAPILLARY_CLIENT_TOKEN"), images_path)
     gdf = gpd.read_file(points_file)
+    gdf["image_id"] = Series()
     gdf["image_lat"] = Series()
     gdf["image_lon"] = Series()
     gdf["residual"] = Series()
-    gdf["image_id"] = Series()
     gdf["image_path"] = Series()
+    gdf["error"] = Series()
 
     def download_image_for_gdf_row(row: int):
         latitude = gdf.at[row, "geometry"].y
         longitude = gdf.at[row, "geometry"].x
-        results = mapillary.get_image_from_coordinates(latitude, longitude)
-        gdf.at[row, "image_lat"] = results["image_lat"]
-        gdf.at[row, "image_lon"] = results["image_lon"]
-        gdf.at[row, "residual"] = results["residual"]
-        gdf.at[row, "image_id"] = results["image_id"]
-        gdf.at[row, "image_path"] = str(results["image_path"])
+        try:
+            results = mapillary.get_image_from_coordinates(latitude, longitude)
+            gdf.at[row, "image_lat"] = results["image_lat"]
+            gdf.at[row, "image_lon"] = results["image_lon"]
+            gdf.at[row, "residual"] = results["residual"]
+            gdf.at[row, "image_id"] = results["image_id"]
+            gdf.at[row, "image_path"] = str(results["image_path"])
+            gdf.at[row, "error"] = results["error"]
+        except HTTPError or RetryError as e:
+            log.error(e)
+            gdf.at[row, "error"] = e.__class__.__name__
 
-    log.info("Downloading %s Images...", len(gdf))
-    thread_map(download_image_for_gdf_row, range(len(gdf)))
-    log.info(gdf.head(20))
+    thread_map(
+        download_image_for_gdf_row,
+        range(len(gdf)),
+        desc=f"Downloading {len(gdf)} Images",
+        unit="images",
+    )
+    log.info(gdf.head())
 
     gdf.to_file(
         Path(points_file.parent, f"{points_file.stem}_images.gpkg"), driver="GPKG"
