@@ -42,6 +42,7 @@ class Mapillary:
             "residual": None,
             "image_id": None,
             "image_path": None,
+            "error": None
         }
 
         response = requests.get(
@@ -90,7 +91,7 @@ class Mapillary:
         try:
             results["image_path"] = self._download_image(image_url, results["image_id"])
         except HTTPError or RetryError as e:
-            results["image_path"] = e.__class__.__name__
+            results["error"] = e.__class__.__name__
         self.downloaded_images.add(results["image_id"])
 
         return results
@@ -142,6 +143,7 @@ def main(
     gdf["image_lon"] = Series()
     gdf["residual"] = Series()
     gdf["image_path"] = Series()
+    gdf["error"] = Series()
 
     def download_image_for_gdf_row(row: int):
         latitude = gdf.at[row, "geometry"].y
@@ -153,9 +155,10 @@ def main(
             gdf.at[row, "residual"] = results["residual"]
             gdf.at[row, "image_id"] = results["image_id"]
             gdf.at[row, "image_path"] = str(results["image_path"])
+            gdf.at[row, "error"] = results["error"]
         except HTTPError or RetryError as e:
             log.error(e)
-            gdf.at[row, "image_id"] = e.__class__.__name__
+            gdf.at[row, "error"] = e.__class__.__name__
 
     thread_map(
         download_image_for_gdf_row,
@@ -163,7 +166,7 @@ def main(
         desc=f"Downloading {len(gdf)} Images",
         unit="images",
     )
-    log.info(gdf.head(20))
+    log.info(gdf.head())
 
     gdf.to_file(
         Path(points_file.parent, f"{points_file.stem}_images.gpkg"), driver="GPKG"

@@ -29,7 +29,7 @@ dependencies = [
   "python-dotenv", 
   "scikit-image", 
   "opencv-python",
-  "stamina"
+  "stamina",
 ]
 
 ## TOOLS ##
