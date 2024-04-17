@@ -42,7 +42,7 @@ class Mapillary:
             "residual": None,
             "image_id": None,
             "image_path": None,
-            "error": None
+            "error": None,
         }
 
         response = requests.get(
