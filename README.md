@@ -109,20 +109,23 @@ python -m src.assign_gvi_to_points /data/raw/mapillary /data/interim/Three_River
 ## Project Organization
 
     ├── LICENSE
-    ├── Makefile           <- Makefile with commands like `make data` or `make train`
-    ├── README.md          <- The top-level README for developers using this project.
+    ├── Makefile                       <- Makefile with commands like `make data` or `make train`
+    ├── README.md                      <- The top-level README for developers using this project.
     ├── data
-    │   ├── interim        <- Intermediate data that has been transformed.
-    │   ├── processed      <- The final, canonical data sets for modeling.
-    │   └── raw            <- The original, immutable data dump.
+    │   ├── interim                    <- Intermediate data that has been transformed.
+    │   ├── processed                  <- The final, canonical data sets for modeling.
+    │   └── raw                        <- The original, immutable data dump.
     │
-    ├── notebooks          <- Jupyter notebooks. Naming convention is a number (for ordering),
-    │                         the creator's initials, and a short `-` delimited description, e.g.
-    │                         `1.0-jqp-initial-data-exploration`.
+    ├── notebooks                      <- Jupyter notebooks. Naming convention is a number (for ordering),
+    │                                  the creator's initials, and a short `-` delimited description, e.g.
+    │                                  `1.0-jqp-initial-data-exploration`.
     │
-    ├── pyproject.toml     <- Single source of truth for dependencies, build system, etc
-    └── src                <- Source code for use in this project.
-        └── __init__.py    <- Makes src a Python module
+    ├── pyproject.toml                 <- Single source of truth for dependencies, build system, etc
+    └── src                            <- Source code for use in this project.
+        └── __init__.py                <- Makes src a Python module
+        └── create_points.py           <- Creates a list of points along the roads of an area
+        └── download_images.py         <- Downloads images from the list of points
+        └── assign_gvi_to_points.py    <- Calculates a Green View Index (GVI) from the images
 
 --------
 
