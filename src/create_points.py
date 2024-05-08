@@ -16,46 +16,36 @@ import shapely
 import typer
 
 DEFAULT_MINI_DIST = 20.0  # meters
-HIGHWAY_VALUES = {
-    None,
-    " ",
-    "bridleway",
-    "footway",
-    "motorway",
-    "motorway_link",
-    "pedestrian",
+HIGHWAY_VALUES_TO_KEEP = {
     "primary",
     "primary_link",
     "secondary",
     "secondary_link",
-    "service",
-    "steps",
     "tertiary",
     "tertiary_link",
-    "trunk",
-    "trunk_link",
+    "residential",
 }
 
 app = typer.Typer()
 
 
-def remove_highways(gdf: gpd.GeoDataFrame):
-    """Returns a copy of a GeoDataFrame of OpenStreetMap road features with highways
-    removed.
+def filter_by_highway_type(gdf: gpd.GeoDataFrame):
+    """Returns a copy of a GeoDataFrame of OpenStreetMap road features filtered by
+    highway type.
 
     Args:
         gdf (geopandas.GeoDataFrame): OpenStreetMap features.
 
     Returns:
-        geopandas.GeoDataFrame: Copy of input GeoDataFrame with highway features
-            removed.
+        geopandas.GeoDataFrame: Copy of input GeoDataFrame of features filtered by
+            highway type.
     """
     if "highway" not in gdf.columns:
         raise ValueError(
             "'highway' column not found in input GeoDataFrame. "
             "Input data must be of OpenStreetMap roads."
         )
-    out_gdf = gdf[~gdf["highway"].isin(HIGHWAY_VALUES)].copy()
+    out_gdf = gdf[gdf["highway"].isin(HIGHWAY_VALUES_TO_KEEP)].copy()
     return out_gdf
 
 
@@ -144,7 +134,7 @@ def main(
     ] = False,
 ):
     gdf = gpd.read_file(in_file)
-    gdf = remove_highways(gdf)
+    gdf = filter_by_highway_type(gdf)
     if drop_null:
         gdf = gdf[~gdf.geometry.isna()]
     else:
