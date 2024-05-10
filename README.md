@@ -72,16 +72,16 @@ python -m src.create_points --help
 
 Both the input files and output files support any file formats that geopandas supports, so long as it can correctly infer the format from the file extension. See the [geopandas documentation](https://geopandas.org/en/stable/docs/user_guide/io.html) for more details.
 
-### 2. Download an image for each point
+### 2. Match an image to each point
 
-We want to fetch a 360 image for each sampled point. You can use the [`download_images.py`](./src/download_images.py) script to find the closest image to each point and download it to local file storage.
+We want a 360 image for each of the sampled points. There is more than option for the imagery source, but you have to choose one option. You cannot use multiple sources (at least at this time). You can use the [`download_images.py`](./src/download_images.py) script to find the closest image to each point and generate a new file with the data included.
 
 #### Example
 
 For example, if you're continuing from the example in previous steps and already generated a `Three_Rivers_Michigan_USA_points.gpkg` file:
 
 ```bash
-python -m src.download_images data/interim/Three_Rivers_Michigan_USA_points.gpkg data/raw/mapillary
+python -m src.download_images data/interim/Three_Rivers_Michigan_USA_points.gpkg MAPILLARY data/raw/images/Three_Rivers_Michigan_USA/
 ```
 
 ### 3. Assign a Green View score to each image/feature
