@@ -4,15 +4,15 @@
 
 ### Goal
 
-We want to automate mapping of tree canopy cover from street level imagery (SLI) to create an informative layer for exploring which areas of a city might be at greater risk during future heat waves and for engaging people in discussions about green and nature-based solutions for climate adaptation. 
+We want to automate mapping of urban vegetation from street level imagery (SLI) to create an informative layer for exploring which areas of a city might be at greater risk during future heat waves and for engaging people in discussions about green and nature-based solutions for climate adaptation. 
+
+The collection and analysis of SLI can be used as part of a citizen science workflow. We hypothesize that a participatory approach to assessing issues like extreme heat hazards from climate change can empower communities by: giving them a greater understanding of the hazards facing their community, building their confidence in designing effective actions to reduce the impacts of those hazards, and strengthening connections between community members.
 
 ### Project inspiration
 
-This project was inspired by the [Treepedia project](https://github.com/mittrees/Treepedia_Public) from [MIT Senseable City Lab](https://senseable.mit.edu/). Treepedia aimed to raise a proactive awareness of urban vegetation improvement, using computer vision techniques applied to Google Street View images. Treepedia measured and mapped the amount of vegetation cover along a city's streets by computing the Green View Index (GVI) on Google Street View (GSV) panoramas. The method considered the obstruction of tree canopies and classified the images accordingly.
+This project was inspired by the [Treepedia project](https://github.com/mittrees/Treepedia_Public) from [MIT Senseable City Lab](https://senseable.mit.edu/). Treepedia aimed to raise a proactive awareness of urban vegetation improvement, using computer vision techniques applied to Google Street View images. Treepedia measured and mapped the amount of vegetation cover along a city's streets by computing the Green View Index (GVI) on Google Street View (GSV) panoramas. Their method considered the obstruction of tree canopies and classified the images accordingly.
 
-We plan to use crowd-sourced, open available imagery uploaded to [Mapillary](https://www.mapillary.com/) instead of GSV panoramas. This will give us greater control over the recency of the images and the geographic coverage of the images, as well as lowering costs. 
-
-Our first workflow will mirror Treepedia's GVI; however, we will explore additional analysis methods including machine learning options that have been developed since 2017 when Treepedia was released.
+We plan to either collect imagery ourselves and use it in a local-only workflow, or we can leverage the crowd-sourced, openly licensed imagery uploaded to [Mapillary](https://www.mapillary.com/). This will give us greater control over the recency of the images and the geographic coverage of the images, and it may lower costs. 
 
 ### Why street level imagery (SLI)?
 
