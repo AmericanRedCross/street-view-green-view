@@ -74,7 +74,7 @@ Both the input files and output files support any file formats that geopandas su
 
 ### 2. Download an image for each point
 
-We want to fetch a 360 image for each sampled point. You can use the [`download_images.py`](./src/download_images.py) script to find the closest image to each point and download it to local file storage.
+We want to fetch a 360 image for each sampled point. You can use the [`download_images.py`](./src/download_images.py) script to find the closest image to each point and download it to local file storage. The output will have `_images` appended to the filename.
 
 #### Example
 
@@ -101,7 +101,7 @@ This example follows from the files and directories created in previous steps an
 saves an output to a new file. 
 
 ```bash
-python -m src.assign_gvi_to_points /data/raw/mapillary /data/interim/Three_Rivers_Michigan_USA_points.gpkg /data/processed/Three_Rivers_GVI.gpkg
+python -m src.assign_gvi_to_points /data/raw/mapillary /data/interim/Three_Rivers_Michigan_USA_points_images.gpkg /data/processed/Three_Rivers_GVI.gpkg
 ```
 
 
