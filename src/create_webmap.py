@@ -102,10 +102,18 @@ def main(
     )
 
     # Generate labels by looking up what the GVI score would be for those values
-    legend_label_1 = round(np.linspace(gdf.gvi_score.min(), gdf.gvi_score.max(), 100)[0])
-    legend_label_2 = round(np.linspace(gdf.gvi_score.min(), gdf.gvi_score.max(), 100)[33])
-    legend_label_3 = round(np.linspace(gdf.gvi_score.min(), gdf.gvi_score.max(), 100)[66])
-    legend_label_4 = round(np.linspace(gdf.gvi_score.min(), gdf.gvi_score.max(), 100)[99])
+    legend_label_1 = round(
+        np.linspace(gdf.gvi_score.min(), gdf.gvi_score.max(), 100)[0]
+    )
+    legend_label_2 = round(
+        np.linspace(gdf.gvi_score.min(), gdf.gvi_score.max(), 100)[33]
+    )
+    legend_label_3 = round(
+        np.linspace(gdf.gvi_score.min(), gdf.gvi_score.max(), 100)[66]
+    )
+    legend_label_4 = round(
+        np.linspace(gdf.gvi_score.min(), gdf.gvi_score.max(), 100)[99]
+    )
 
     # Normalise the label values to lookup against the colourmap
     legend_gvi_norm = (legend_gvi - np.min(legend_gvi)) / (
