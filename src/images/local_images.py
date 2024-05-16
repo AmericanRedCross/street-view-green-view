@@ -2,24 +2,31 @@ from pathlib import Path
 
 from geopy import Point
 from geopy.distance import ELLIPSOIDS, distance
+from loguru import logger as log
 import numpy as np
 from PIL.ExifTags import GPS
 from PIL.Image import open
+from typing_extensions import override
 
 from src.images.image_source import ImageSource
-from src.utils import log
 
 EXIF_GPS_TAG = 34853
 
 
 class LocalImages(ImageSource):
-    def __init__(self, basepath: Path) -> None:
-        super().__init__(basepath)
+    def __init__(self, images_path: Path) -> None:
+        """
+        All Args Constructor
+        :param images_path: Where the Images Should Be Located
+        """
+        super().__init__(images_path)
         dir_images = (
-            set().union(basepath.glob("**/*.jpg")).union(basepath.glob("**/*.jpeg"))
+            set()
+            .union(images_path.glob("**/*.jpg"))
+            .union(images_path.glob("**/*.jpeg"))
         )
         if len(dir_images) == 0:
-            raise FileNotFoundError(f"No Images Found In Path: {basepath}")
+            raise FileNotFoundError(f"No Images Found In Path: {images_path}")
 
         self.images = dict()
         for image_path in dir_images:
@@ -43,14 +50,23 @@ class LocalImages(ImageSource):
                     longitude_dir,
                 )
 
-                self.images[location] = image_path
+                self.images[image_path] = location
 
         self.assigned_images = set()
 
-        log.debug("Images in Directory: %s", self.images)
+        log.debug("Images in Directory: {}", self.images)
 
-    def get_image_from_coordinates(self, latitude: int, longitude: int) -> dict:
-        log.debug("Get Image From Coordinates: %s, %s", latitude, longitude)
+    @override
+    def get_image_from_coordinates(self, latitude: float, longitude: float) -> dict:
+        """
+        Gets an Image for a Set of Coordinates
+        From A Folder of Local Images Using EXIF Data
+        :param latitude: Latitude of the Point to Get an Image for
+        :param longitude: Longitude of the Point to Get an Image for
+        :return: A Dictionary Containing the Image ID, Path, Latitude, Longitude,
+        Residual Distance From Point, and Error if any
+        """
+        log.debug("Get Image From Coordinates: {}, {}", latitude, longitude)
         results = {
             "image_lat": None,
             "image_lon": None,
@@ -60,36 +76,35 @@ class LocalImages(ImageSource):
             "error": None,
         }
 
-        filtered_images = set(
-            filter(
-                lambda image_point: image_point not in self.assigned_images, self.images
-            )
+        filtered_images = filter(
+            lambda img: img not in self.assigned_images, self.images.keys()
         )
-        if len(filtered_images) == 0:
-            log.debug("No Unassigned Images Available")
-            return results
 
         closest = None
         closest_distance = np.inf
-        for p, point in enumerate(filtered_images):
-            image_coordinates = Point(point)
+        for i, image in enumerate(filtered_images):
+            image_coordinates = Point(self.images[image])
             coordinates = Point(latitude, longitude)
             residual = distance(
                 coordinates, image_coordinates, ellipsoid=ELLIPSOIDS["WGS-84"]
             )
 
             if residual < closest_distance:
-                closest = point
+                closest = image
                 closest_distance = residual
 
-        image = self.images[closest]
-        log.debug("Closest Image: %s", image)
+        if closest is None and closest_distance == np.inf:
+            log.debug("No Unassigned Images Available")
+            return results
+
+        image = closest
+        log.debug("Closest Image: {}", image)
         results["image_id"] = image.stem
-        image_coordinates = Point(closest)
+        image_coordinates = Point(self.images[image])
         results["image_lat"] = image_coordinates.latitude
         results["image_lon"] = image_coordinates.longitude
         results["residual"] = closest_distance.m
-        results["image_path"] = image
-        self.assigned_images.add(closest)
+        results["image_path"] = image.resolve()
+        self.assigned_images.add(image)
 
         return results
