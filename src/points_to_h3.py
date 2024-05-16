@@ -39,11 +39,11 @@ def main(
 
     Args:
             input_file: Path to file containing point layer with GVI scores.
-            cell_resolution: H3 cell resolution to aggregate to, 
-		between 0 (largest) and 15 (smallest)
+            cell_resolution: H3 cell resolution to aggregate to,
+                between 0 (largest) and 15 (smallest)
             aggregation_operations:
-            output_file: File to write output data to 
-		(can specify any GDAL-supported format)
+            output_file: File to write output data to
+                (can specify any GDAL-supported format)
 
     Returns:
             File containing h3 polygons with aggregated GVI scores
