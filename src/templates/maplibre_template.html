@@ -35,6 +35,25 @@
             
         });
 
+        // When a click event occurs on a feature in the states layer, open a popup at the
+        // location of the click, with description HTML from its properties.
+        map.on('click', 'gvi-scores', (e) => {
+            new maplibregl.Popup()
+                .setLngLat(e.lngLat)
+                .setHTML(e.features[0].properties.gvi_score)
+                .addTo(map);
+        });
+
+        // Change the cursor to a pointer when the mouse is over the states layer.
+        map.on('mouseenter', 'gvi-scores', () => {
+            map.getCanvas().style.cursor = 'pointer';
+        });
+
+        // Change it back to a pointer when it leaves.
+        map.on('mouseleave', 'gvi-scores', () => {
+            map.getCanvas().style.cursor = '';
+        });
+
         map.addLayer({
             'id': 'gvi-scores',
             'type': 'fill',
