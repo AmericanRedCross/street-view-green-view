@@ -51,6 +51,9 @@ def main(
     else:
         gdf = gdf.to_crs("EPSG:4326")
 
+    # Round GVI score to make map labels more readable
+    gdf["gvi_score"] = round(gdf["gvi_score"], 2)
+
     # get central coordinates of all features
     centre = (
         str(gdf.dissolve().centroid.x.values[0])
