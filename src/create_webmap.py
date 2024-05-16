@@ -90,6 +90,35 @@ def main(
         lambda x: matplotlib.colors.rgb2hex(cmap(x))
     )
 
+    # Generate divs for legend
+    # Pick 4 evenly-spaced values from the gvi scores to use in the legend
+    legend_gvi = list(
+        np.arange(
+            gdf.gvi_score.min(),
+            gdf.gvi_score.max(),
+            (gdf.gvi_score.max() - gdf.gvi_score.min()) / 4,
+            dtype=int,
+        )
+    )
+
+    # Generate labels by looking up what the GVI score would be for those values
+    legend_label_1 = round(np.linspace(gdf.gvi_score.min(), gdf.gvi_score.max(), 100)[0])
+    legend_label_2 = round(np.linspace(gdf.gvi_score.min(), gdf.gvi_score.max(), 100)[33])
+    legend_label_3 = round(np.linspace(gdf.gvi_score.min(), gdf.gvi_score.max(), 100)[66])
+    legend_label_4 = round(np.linspace(gdf.gvi_score.min(), gdf.gvi_score.max(), 100)[99])
+
+    # Normalise the label values to lookup against the colourmap
+    legend_gvi_norm = (legend_gvi - np.min(legend_gvi)) / (
+        np.max(legend_gvi) - np.min(legend_gvi)
+    )
+
+    # Generate the html colour code from the normalised values
+    legend_colours = []
+    for i in legend_gvi_norm:
+        legend_colours.append(matplotlib.colors.rgb2hex(cmap(i)))
+    # Assign patch colours to use in HTML template
+    legend_patch_1, legend_patch_2, legend_patch_3, legend_patch_4 = legend_colours
+
     # Load the MapLibre HMTL template
     environment = Environment(loader=FileSystemLoader("src/templates"))
     template = environment.get_template("maplibre_template.html")
@@ -106,6 +135,14 @@ def main(
                 zoom=zoom_level,
                 bounds=bounds_str,
                 maptiler_api_key=maptiler_api_key,
+                legend_label_1=legend_label_1,
+                legend_label_2=legend_label_2,
+                legend_label_3=legend_label_3,
+                legend_label_4=legend_label_4,
+                legend_patch_1=legend_patch_1,
+                legend_patch_2=legend_patch_2,
+                legend_patch_3=legend_patch_3,
+                legend_patch_4=legend_patch_4,
             )
         )
 
