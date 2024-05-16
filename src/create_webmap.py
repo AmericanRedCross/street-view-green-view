@@ -1,13 +1,11 @@
-"""Create webmap of GVI results"""
-
 import os
 from pathlib import Path
 
 import geopandas as gpd
 from jinja2 import Environment, FileSystemLoader
 import matplotlib
-from shapely.geometry import box
 import numpy as np
+from shapely.geometry import box
 import typer
 
 try:
@@ -80,21 +78,14 @@ def main(
     # Load API key for map tiles from environment variable
     maptiler_api_key = os.getenv("MAPTILER_API_KEY")
 
-    # Set up colours based on dataset values
-    # Create a plot with a legend
-    ax = gdf.plot(
-        column="gvi_score", scheme="natural_breaks", k=5, cmap="YlGnBu_r", legend=True
-    )
-
-    # Convert the legend labels to numeric break points
-    labels = [t.get_text() for t in ax.get_legend().get_texts()]
-    breaks = [float(t.split(',')[0].strip()) for t in labels]
-    breaks_norm = list((breaks-np.min(breaks)) / (np.max(breaks)-np.min(breaks)))
-
-    # Lookup the colourmap values for each breakpoint
+    # Lookup the colourmap values for each GVI score
     cmap = matplotlib.colormaps["viridis"]
-    gdf['gvi_norm'] = (gdf.gvi_score-np.min(gdf.gvi_score)) / (np.max(gdf.gvi_score)-np.min(gdf.gvi_score))
-    gdf['html_color'] = gdf['gvi_norm'].apply(lambda x: matplotlib.colors.rgb2hex(cmap(x)))
+    gdf["gvi_norm"] = (gdf.gvi_score - np.min(gdf.gvi_score)) / (
+        np.max(gdf.gvi_score) - np.min(gdf.gvi_score)
+    )
+    gdf["html_color"] = gdf["gvi_norm"].apply(
+        lambda x: matplotlib.colors.rgb2hex(cmap(x))
+    )
 
     # Load the MapLibre HMTL template
     environment = Environment(loader=FileSystemLoader("src/templates"))
