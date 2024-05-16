@@ -30,6 +30,7 @@ dependencies = [
   "scikit-image", 
   "opencv-python",
   "stamina",
+  "h3pandas"
 ]
 
 ## TOOLS ##
