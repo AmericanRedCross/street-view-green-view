@@ -40,13 +40,9 @@
             'type': 'fill',
             'source': 'gvi_hex',
             'paint':{
-                'fill-color': ['interpolate',
-                    ['linear'],
-                    ['get', 'gvi_score'],
-                    {{ interpolation_values }}
-                ],
                 'fill-outline-color': 'grey',
-                'fill-opacity': 0.75
+                'fill-opacity': 0.75, 
+                'fill-color': ['get', 'html_color']
             }
         });
     });

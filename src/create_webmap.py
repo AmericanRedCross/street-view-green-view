@@ -7,6 +7,7 @@ import geopandas as gpd
 from jinja2 import Environment, FileSystemLoader
 import matplotlib
 from shapely.geometry import box
+import numpy as np
 import typer
 
 try:
@@ -87,16 +88,13 @@ def main(
 
     # Convert the legend labels to numeric break points
     labels = [t.get_text() for t in ax.get_legend().get_texts()]
-    breaks = [t.split(",")[0].strip() for t in labels]
+    breaks = [float(t.split(',')[0].strip()) for t in labels]
+    breaks_norm = list((breaks-np.min(breaks)) / (np.max(breaks)-np.min(breaks)))
 
     # Lookup the colourmap values for each breakpoint
     cmap = matplotlib.colormaps["viridis"]
-    cmap_lst = []
-    for i in breaks:
-        cmap_lst.append(i)
-        # colourmaps values from 0 to 1 - divide value by 100
-        cmap_lst.append("'"+matplotlib.colors.rgb2hex(cmap(float(i) / 100))+"'")
-    interpolation_values = ", ".join(cmap_lst)
+    gdf['gvi_norm'] = (gdf.gvi_score-np.min(gdf.gvi_score)) / (np.max(gdf.gvi_score)-np.min(gdf.gvi_score))
+    gdf['html_color'] = gdf['gvi_norm'].apply(lambda x: matplotlib.colors.rgb2hex(cmap(x)))
 
     # Load the MapLibre HMTL template
     environment = Environment(loader=FileSystemLoader("src/templates"))
@@ -114,7 +112,6 @@ def main(
                 zoom=zoom_level,
                 bounds=bounds_str,
                 maptiler_api_key=maptiler_api_key,
-                interpolation_values=interpolation_values,
             )
         )
 
