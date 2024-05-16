@@ -43,12 +43,7 @@
                 'fill-color': ['interpolate',
                     ['linear'],
                     ['get', 'gvi_score'],
-                    {{ gvi_min }}, 
-                    '#d8b365',
-                    {{ gvi_mean}}, 
-                    '#f5f5f5',
-                    {{ gvi_max }},
-                    '#5ab4ac'
+                    {{ interpolation_values }}
                 ],
                 'fill-outline-color': 'grey',
                 'fill-opacity': 0.75
