@@ -1,6 +1,5 @@
 """Create webmap of GVI results"""
 
-import json
 import os
 from pathlib import Path
 
@@ -88,23 +87,19 @@ def main(
 
     # Convert the legend labels to numeric break points
     labels = [t.get_text() for t in ax.get_legend().get_texts()]
-    breaks = [float(t.split(",")[0].strip()) for t in labels]
+    breaks = [t.split(",")[0].strip() for t in labels]
 
     # Lookup the colourmap values for each breakpoint
     cmap = matplotlib.colormaps["viridis"]
     cmap_lst = []
     for i in breaks:
-        cmap_lst.append(str(i))
+        cmap_lst.append(i)
         # colourmaps values from 0 to 1 - divide value by 100
-        cmap_lst.append(matplotlib.colors.rgb2hex(cmap(i / 100)))
+        cmap_lst.append("'"+matplotlib.colors.rgb2hex(cmap(float(i) / 100))+"'")
     interpolation_values = ", ".join(cmap_lst)
 
     # Load the MapLibre HMTL template
-    environment = Environment(
-        loader=FileSystemLoader(
-            "/home/lex/Documents/street-view-green-view/src/templates"
-        )
-    )
+    environment = Environment(loader=FileSystemLoader("src/templates"))
     template = environment.get_template("maplibre_template.html")
 
     # Generate the HTML file from the template, filling dynamic values
