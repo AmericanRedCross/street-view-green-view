@@ -39,10 +39,10 @@ def main(
         int,
         typer.Argument(
             help="""(Optional) Starting zoom level for webmap. 
-			Takes integer between 0 (small scale) and 15 (large scale).
+			Takes integer between 0 (small scale) and 20 (large scale).
 			"""
         ),
-    ] = 10,
+    ] = 12,
 ):
     gdf = gpd.read_file(input_file)
     # if crs is not 4326, convert to 4326
@@ -64,7 +64,7 @@ def main(
 
     # Calculate datasdet bounds (with a buffer of 0.5 degrees) to limit webmap bounds
     gdf_bounds = gdf.total_bounds
-    bbox = box(*gdf_bounds).buffer(0.5, cap_style="square", join_style="mitre")
+    bbox = box(*gdf_bounds).buffer(0.25, cap_style="square", join_style="mitre")
     bounds = bbox.bounds
     bounds_str = (
         "["
