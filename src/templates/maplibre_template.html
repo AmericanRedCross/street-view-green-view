@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>{{ title }}</title>
+    <meta charset='utf-8'>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel='stylesheet' href='https://unpkg.com/maplibre-gl@4.2.0/dist/maplibre-gl.css' />
+    <script src='https://unpkg.com/maplibre-gl@4.2.0/dist/maplibre-gl.js'></script>
+    <style>
+        body { margin: 0; padding: 0; }
+        html, body, #map { height: 100%; }
+
+    </style>
+</head>
+<body>
+<div id="map"></div>
+<script>
+    const bounds = [
+    {{ bounds }}
+    ];
+    
+    const map = new maplibregl.Map({
+        container: 'map', // container id
+        style: 'https://api.maptiler.com/maps/dataviz/style.json?key={{ maptiler_api_key }}', // style URL
+        center: {{ centre_coords }}, // starting position [lng, lat]
+        zoom: {{ zoom }}, // starting zoom
+        maxBounds: bounds,
+        maplibreLogo: true
+    });
+    
+    map.on('load', () => {
+        map.addSource('gvi_hex', {
+            'type': 'geojson',
+            'data': {{ geojson }}
+            
+        });
+
+        map.addLayer({
+            'id': 'gvi-scores',
+            'type': 'fill',
+            'source': 'gvi_hex',
+            'paint':{
+                'fill-outline-color': 'grey',
+                'fill-opacity': 0.75, 
+                'fill-color': ['get', 'html_color']
+            }
+        });
+    });
+
+</script>
+</body>
+</html>
