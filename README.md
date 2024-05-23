@@ -101,7 +101,7 @@ This example follows from the files and directories created in previous steps an
 saves an output to a new file. 
 
 ```bash
-python -m src.assign_gvi_to_points /data/raw/mapillary /data/interim/Three_Rivers_Michigan_USA_points_images.gpkg /data/processed/Three_Rivers_GVI.gpkg
+python -m src.assign_gvi_to_points data/raw/mapillary data/interim/Three_Rivers_Michigan_USA_points_images.gpkg data/processed/Three_Rivers_GVI.gpkg
 ```
 
 
