@@ -89,7 +89,8 @@ class Mapillary(ImageSource):
             )
             residual = distance(
                 (latitude, longitude), image_coordinates, ellipsoid=ELLIPSOIDS["WGS-84"]
-            )
+            ).m
+
             if residual < closest_distance:
                 closest = i
                 closest_distance = residual
@@ -103,7 +104,7 @@ class Mapillary(ImageSource):
         results["image_id"] = image["id"]
         results["image_lat"] = image["geometry"]["coordinates"][1]
         results["image_lon"] = image["geometry"]["coordinates"][0]
-        results["residual"] = closest_distance.m
+        results["residual"] = closest_distance
         image_url = image["thumb_original_url"]
         try:
             results["image_path"] = self._download_image(
