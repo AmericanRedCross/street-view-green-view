@@ -3,7 +3,6 @@ from typing import Optional
 
 from geopy.distance import ELLIPSOIDS, distance
 from loguru import logger as log
-import numpy as np
 import requests
 from requests import HTTPError
 from stamina import retry
@@ -14,18 +13,24 @@ from src.images.image_source import ImageSource
 
 
 class Mapillary(ImageSource):
+    """
+    Mapillary Image Source
+    """
+
     url = "https://graph.mapillary.com/images"
 
     def __init__(
-        self,
-        access_token: str,
-        images_path: Path = Path(Path(__file__).parent.parent, "data/raw/mapillary"),
+        self, access_token: str, images_path: Path, max_distance: float
     ) -> None:
         """
         All Args Constructor
-        :param images_path: Where the Images Should Be Located
+        Args:
+            access_token: Mapillary Access Token
+            images_path: Where the images should be located
+            max_distance: Maximum distance between point and image location, in meters
+
         """
-        super().__init__(images_path)
+        super().__init__(images_path, max_distance)
         self.access_token = access_token
         self.assigned_images = set()
 
@@ -33,12 +38,14 @@ class Mapillary(ImageSource):
     @retry(on=HTTPError, attempts=3)
     def get_image_from_coordinates(self, latitude: float, longitude: float) -> dict:
         """
-        Gets an Image for a Set of Coordinates
-        From the Mapillary API
-        :param latitude: Latitude of the Point to Get an Image for
-        :param longitude: Longitude of the Point to Get an Image for
-        :return: A Dictionary Containing the Image ID, Path, Latitude, Longitude,
-        Residual Distance From Point, and Error if any
+        Gets an image for a set of coordinates
+        Args:
+            latitude: Latitude of the point to get an image for
+            longitude: Longitude of the point to get an image for
+
+        Returns: A dict containing the Image ID, Path, Latitude, Longitude,
+            Residual Distance From Point, and Error if any
+
         """
         log.debug("Get Image From Coordinates: {}, {}", latitude, longitude)
         results = {
@@ -74,7 +81,7 @@ class Mapillary(ImageSource):
         )
 
         closest = 0
-        closest_distance = np.inf
+        closest_distance = self.max_distance
         for i, image in enumerate(filtered_images):
             image_coordinates = (
                 image["geometry"]["coordinates"][1],
@@ -87,7 +94,7 @@ class Mapillary(ImageSource):
                 closest = i
                 closest_distance = residual
 
-        if closest is None and closest_distance == np.inf:
+        if closest is None:
             log.debug("No Unassigned Images Available")
             return results
 
@@ -108,26 +115,32 @@ class Mapillary(ImageSource):
 
         return results
 
-    def _bounds(self, latitude, longitude) -> str:
+    def _bounds(self, latitude: float, longitude: float) -> str:
         """
-        Returns a String Representing the Bounding Box For The Mapillary API
-        :param latitude: Latitude of the Point to Get an Image for
-        :param longitude: Longitude of the Point to Get an Image for
-        :return: str Representing the Bounding Box
+        Gets Bounding Box to Call Mapillary API to Search for Images
+        Args:
+            latitude: Latitude of the point to get an image for
+            longitude: Longitude of the point to get an image for
+
+        Returns: str representation of the bounding box
+
         """
-        left = longitude - 10 / 111_111
-        bottom = latitude - 10 / 111_111
-        right = longitude + 10 / 111_111
-        top = latitude + 10 / 111_111
+        left = longitude - self.max_distance / 111_111
+        bottom = latitude - self.max_distance / 111_111
+        right = longitude + self.max_distance / 111_111
+        top = latitude + self.max_distance / 111_111
         return f"{left},{bottom},{right},{top}"
 
     @retry(on=HTTPError, attempts=3)
-    def _download_image(self, image_url, image_id) -> Optional[Path]:
+    def _download_image(self, image_url: str, image_id: str) -> Optional[Path]:
         """
         Downloads an Image from a URL to images_path/image_id.jpeg
-        :param image_url: The str URL of the Image
-        :param image_id: The str ID of the Image
-        :return: The Downloaded Path of the Image
+        Args:
+            image_url: The URL of the image
+            image_id: The Mapillary ID of the image
+
+        Returns: Path of the downloaded image, or None
+
         """
         log.debug("Downloading Image: {}", image_id)
         response = requests.get(image_url, stream=True)

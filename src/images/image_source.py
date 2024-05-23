@@ -4,22 +4,32 @@ from pathlib import Path
 
 
 class ImageSource(ABC):
-    def __init__(self, images_path: Path) -> None:
+    """
+    Image Source Interface
+    """
+
+    def __init__(self, images_path: Path, max_distance: float) -> None:
         """
         All Args Constructor
-        :param images_path: Where the Images Should Be Located
+        Args:
+            images_path: Where the images should be located
+            max_distance: Maximum distance between point and image location, in meters
         """
         self.images_path = images_path
         self.images_path.mkdir(parents=True, exist_ok=True)
+        self.max_distance = max_distance
 
     @abstractmethod
     def get_image_from_coordinates(self, latitude: float, longitude: float) -> dict:
         """
-        Gets an Image for a Set of Coordinates
-        :param latitude: Latitude of the Point to Get an Image for
-        :param longitude: Longitude of the Point to Get an Image for
-        :return: A Dictionary Containing the Image ID, Path, Latitude, Longitude,
-        Residual Distance From Point, and Error if any
+        Gets an image for a set of coordinates
+        Args:
+            latitude: Latitude of the point to get an image for
+            longitude: Longitude of the point to get an image for
+
+        Returns: A dict containing the Image ID, Path, Latitude, Longitude,
+            Residual Distance From Point, and Error if any
+
         """
         raise NotImplementedError
 

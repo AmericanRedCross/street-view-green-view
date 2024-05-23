@@ -23,25 +23,33 @@ app = Typer()
 def main(
     points_file: Annotated[
         Path,
-        Argument(help="Path to Input Points File"),
+        Argument(help="Path to input points file"),
     ],
     image_source: Annotated[
-        ImageSourceSelector, Argument(help="Where to Get Images From")
+        ImageSourceSelector, Argument(help="Where to get images from")
     ],
     images_path: Annotated[
         Path,
-        Argument(help="Where the Images Should Be Located"),
+        Argument(help="Where the images should be located"),
     ],
-    verbose: Annotated[bool, Option(help="Sets Log Level to DEBUG")] = False,
-):
+    max_distance: Annotated[
+        float,
+        Option(help="Maximum distance between point and image location, in meters"),
+    ] = 10,
+    verbose: Annotated[bool, Option(help="Sets log level to DEBUG")] = False,
+) -> Path:
     """
     Assigns Images to Points
-    :param points_file: Path to Input Points File.
-    File Format should be readable by :func:`geopandas.read_file`
-    :param image_source: Where to Get Images From.
-    :param images_path: Where the Images Should Be Located.
-    :param verbose: Sets Log Level to DEBUG
-    :return: None
+    Args:
+        points_file: Path to input points file
+            File format should be readable by geopandas.read_file
+        image_source: Where to get images from
+        images_path: Where the images should be located
+        max_distance: Maximum distance between point and image location, in meters
+            Can also be interpreted as "radius" of image bounding box
+        verbose: Sets log level to DEBUG
+
+    Returns: The Path of the output GPKG file
     """
 
     log.remove()
@@ -50,11 +58,10 @@ def main(
     else:
         log.add(sys.stdout, level="INFO")
 
-    source = None
     if image_source == ImageSourceSelector.local:
-        source = LocalImages(images_path)
+        source = LocalImages(images_path, max_distance)
     elif image_source == ImageSourceSelector.mapillary:
-        source = Mapillary(getenv("MAPILLARY_CLIENT_TOKEN"), images_path)
+        source = Mapillary(getenv("MAPILLARY_CLIENT_TOKEN"), images_path, max_distance)
     else:
         raise ValueError(f"Unknown Image Source: {image_source}")
 
@@ -95,9 +102,11 @@ def main(
         .any(),
     )
 
-    gdf.to_file(
-        Path(points_file.parent, f"{points_file.stem}_images.gpkg"), driver="GPKG"
-    )
+    output_file = Path(points_file.parent, f"{points_file.stem}_images.gpkg").resolve()
+    gdf.to_file(output_file, driver="GPKG")
+    log.success("Saved Points and Images to {}", output_file)
+
+    return output_file
 
 
 if __name__ == "__main__":

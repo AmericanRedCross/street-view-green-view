@@ -3,9 +3,8 @@ from pathlib import Path
 from geopy import Point
 from geopy.distance import ELLIPSOIDS, distance
 from loguru import logger as log
-import numpy as np
 from PIL.ExifTags import GPS
-from PIL.Image import open
+from PIL.Image import open as open_image
 from typing_extensions import override
 
 from src.images.image_source import ImageSource
@@ -14,12 +13,19 @@ EXIF_GPS_TAG = 34853
 
 
 class LocalImages(ImageSource):
-    def __init__(self, images_path: Path) -> None:
+    """
+    Local Image Source
+    """
+
+    def __init__(self, images_path: Path, max_distance: float) -> None:
         """
         All Args Constructor
-        :param images_path: Where the Images Should Be Located
+        Args:
+            images_path: Where the images should be located
+            max_distance: Maximum distance between point and image location, in meters
+
         """
-        super().__init__(images_path)
+        super().__init__(images_path, max_distance)
         dir_images = (
             set()
             .union(images_path.glob("**/*.jpg"))
@@ -30,7 +36,7 @@ class LocalImages(ImageSource):
 
         self.images = dict()
         for image_path in dir_images:
-            with open(image_path) as image:
+            with open_image(image_path) as image:
                 exif_data = image._getexif()
                 gps_data = exif_data.get(EXIF_GPS_TAG)
 
@@ -59,12 +65,14 @@ class LocalImages(ImageSource):
     @override
     def get_image_from_coordinates(self, latitude: float, longitude: float) -> dict:
         """
-        Gets an Image for a Set of Coordinates
-        From A Folder of Local Images Using EXIF Data
-        :param latitude: Latitude of the Point to Get an Image for
-        :param longitude: Longitude of the Point to Get an Image for
-        :return: A Dictionary Containing the Image ID, Path, Latitude, Longitude,
-        Residual Distance From Point, and Error if any
+        Gets an image for a set of coordinates
+        Args:
+            latitude: Latitude of the point to get an image for
+            longitude: Longitude of the point to get an image for
+
+        Returns: A dict containing the Image ID, Path, Latitude, Longitude,
+            Residual Distance From Point, and Error if any
+
         """
         log.debug("Get Image From Coordinates: {}, {}", latitude, longitude)
         results = {
@@ -81,19 +89,19 @@ class LocalImages(ImageSource):
         )
 
         closest = None
-        closest_distance = np.inf
+        closest_distance = self.max_distance
         for i, image in enumerate(filtered_images):
             image_coordinates = Point(self.images[image])
             coordinates = Point(latitude, longitude)
             residual = distance(
                 coordinates, image_coordinates, ellipsoid=ELLIPSOIDS["WGS-84"]
-            )
+            ).m
 
             if residual < closest_distance:
                 closest = image
                 closest_distance = residual
 
-        if closest is None and closest_distance == np.inf:
+        if closest is None:
             log.debug("No Unassigned Images Available")
             return results
 
@@ -103,7 +111,7 @@ class LocalImages(ImageSource):
         image_coordinates = Point(self.images[image])
         results["image_lat"] = image_coordinates.latitude
         results["image_lon"] = image_coordinates.longitude
-        results["residual"] = closest_distance.m
+        results["residual"] = closest_distance
         results["image_path"] = image.resolve()
         self.assigned_images.add(image)
 
