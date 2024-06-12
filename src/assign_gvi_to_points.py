@@ -69,7 +69,7 @@ def main(
         ),
     ],
 ):
-    """
+    """Calculate Green View Index (GVI) scores for a dataset of street-level images.
 
     Args:
             image_directory: directory path for folder holding Mapillary images
