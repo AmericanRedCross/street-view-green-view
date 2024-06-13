@@ -26,18 +26,20 @@ dependencies = [
   "pandas",
   "geopy",
   "tqdm",
-  "python-dotenv", 
-  "scikit-image", 
+  "python-dotenv",
+  "scikit-image",
   "opencv-python",
   "stamina",
   "pillow",
   "loguru",
+  "pytest",
+  "pytest-cov",
 ]
 
 ## TOOLS ##
 
 [tool.ruff]
-src = ["src/**/*.py"]
+src = ["src/**/*.py", "tests/**/*.py"]
 
 [tool.ruff.lint]
 select = [
@@ -50,3 +52,11 @@ unfixable = ["F"]
 [tool.ruff.lint.isort]
 known-first-party = ["src"]
 force-sort-within-sections = true
+
+[tool.pytest.ini_options]
+minversion = "6.0"
+addopts = "--cov=src --cov-report=term --cov-report=html --cov-report=xml"
+testpaths = ["tests"]
+
+[tool.coverage.run]
+source = ["src"]

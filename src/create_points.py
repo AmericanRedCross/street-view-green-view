@@ -133,6 +133,7 @@ def main(
         ),
     ] = False,
 ):
+    """Create a dataset of interpolated points along OpenStreetMap roads."""
     gdf = gpd.read_file(in_file)
     gdf = filter_by_highway_type(gdf)
     if drop_null:
