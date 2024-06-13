@@ -4,10 +4,11 @@ from typing import Optional
 from geopy.distance import ELLIPSOIDS, distance
 from loguru import logger as log
 import requests
-from requests import HTTPError
+from requests import RequestException
 from stamina import retry
 from tenacity import RetryError
 from typing_extensions import override
+from urllib3.exceptions import HTTPError
 
 from src.images.image_source import ImageSource
 
@@ -35,7 +36,7 @@ class Mapillary(ImageSource):
         self.assigned_images = set()
 
     @override
-    @retry(on=HTTPError, attempts=3)
+    @retry(on=(HTTPError, RequestException), attempts=3)
     def get_image_from_coordinates(self, latitude: float, longitude: float) -> dict:
         """
         Gets an image for a set of coordinates
