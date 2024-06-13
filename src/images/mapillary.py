@@ -133,7 +133,7 @@ class Mapillary(ImageSource):
         top = latitude + self.max_distance / 111_111
         return f"{left},{bottom},{right},{top}"
 
-    @retry(on=HTTPError, attempts=3)
+    @retry(on=(HTTPError, RequestException), attempts=3)
     def _download_image(self, image_url: str, image_id: str) -> Optional[Path]:
         """
         Downloads an Image from a URL to images_path/image_id.jpeg
