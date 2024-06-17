@@ -104,6 +104,33 @@ saves an output to a new file.
 python -m src.assign_gvi_to_points /data/raw/mapillary /data/interim/Three_Rivers_Michigan_USA_points.gpkg /data/processed/Three_Rivers_GVI.gpkg
 ```
 
+### 4. Visualize the results
+
+We provide an option here but we encourage you to explore different ways to visualize the results. We would love to know what you try that works and what doesn't. How can we improve on these guidance materials?
+
+#### Generate an H3 polygon layer
+
+We can generate an H3 polygon layer from the point layer. As an overlay it may make spatial trends more visible by merging some of the values from close together points. 
+
+### Example
+
+```bash
+# python -m src.create_webmap path/to/input_file.gpkg path/to/output_file.gpkg cell_resolution 
+python -m src.points_to_h3 data/processed/Three_Rivers_GVI.gpkg data/processed/Three_Rivers_h3_polygons_10.gpkg 10
+```
+
+The larger the number for the [H3 cell resolution](https://h3geo.org/docs/core-library/restable/), the smaller the individual hexagons. 
+
+#### Generate a web map
+
+We can generate an HTML file that contains javascript to display a web map showing the H3 polygons, styled by the mean GVI score for each polygon.
+
+### Example
+
+```bash
+# python -m src.create_webmap path/to/input_file.gpkg path/to/output/ output_file.html default_zoom_for_webmap 
+python -m src.create_webmap data/processed/Three_Rivers_h3_polygons_10.gpkg /output Three_Rivers_gvi_webmap.html 10
+```
 
 
 ## Project Organization
