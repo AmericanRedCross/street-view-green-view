@@ -16,27 +16,31 @@ classifiers = [
 dependencies = [
   "folium",
   "geopandas",
+  "geopy",
   "h3pandas",
+  "loguru",
   "mapclassify",
   "matplotlib",
   "numpy",
-  "ruff",
-  "requests",
-  "shapely",
-  "typer",
-  "pandas",
-  "geopy",
-  "tqdm",
-  "python-dotenv", 
-  "scikit-image", 
   "opencv-python",
+  "pandas",
+  "pillow",
+  "pytest-cov",
+  "pytest",
+  "python-dotenv",
+  "requests",
+  "ruff",
+  "scikit-image",
+  "shapely",
   "stamina",
+  "tqdm",
+  "typer",
 ]
 
 ## TOOLS ##
 
 [tool.ruff]
-src = ["src/**/*.py"]
+src = ["src/**/*.py", "tests/**/*.py"]
 
 [tool.ruff.lint]
 select = [
@@ -49,3 +53,11 @@ unfixable = ["F"]
 [tool.ruff.lint.isort]
 known-first-party = ["src"]
 force-sort-within-sections = true
+
+[tool.pytest.ini_options]
+minversion = "6.0"
+addopts = "--cov=src --cov-report=term --cov-report=html --cov-report=xml"
+testpaths = ["tests"]
+
+[tool.coverage.run]
+source = ["src"]

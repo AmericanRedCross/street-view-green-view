@@ -19,13 +19,9 @@ endif
 #################################################################################
 
 ## Install Python Dependencies
-requirements: 
+requirements:
 	$(PYTHON_INTERPRETER) -m pip install -U pip setuptools wheel
 	$(PYTHON_INTERPRETER) -m pip install -e .
-
-## Make Dataset
-data: requirements
-	$(PYTHON_INTERPRETER) src/data/make_dataset.py data/raw data/processed
 
 ## Delete all compiled Python files
 clean:
@@ -34,13 +30,17 @@ clean:
 
 ## Format using ruff
 format:
-	ruff format src
-	ruff check src --fix
+	ruff format src tests
+	ruff check src tests --fix
 
 ## Lint using ruff
 lint:
-	ruff format --check src
-	ruff check src
+	ruff format --check src tests
+	ruff check src tests
+
+## Run tests
+test:
+	pytest -vv
 
 ## Set up python interpreter environment
 create_environment:

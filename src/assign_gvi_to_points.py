@@ -69,7 +69,7 @@ def main(
         ),
     ],
 ):
-    """
+    """Calculate Green View Index (GVI) scores for a dataset of street-level images.
 
     Args:
             image_directory: directory path for folder holding Mapillary images
@@ -86,7 +86,7 @@ def main(
     else:
         raise ValueError("Image directory could not be found")
     # Check image directory contains image files
-    # (This is based on the jpeg export in download_images.py)
+    # (This is based on the jpeg export in assign_images.py)
     if ".jpeg" in "\t".join(os.listdir(os.path.join(image_directory))):
         pass
     else:

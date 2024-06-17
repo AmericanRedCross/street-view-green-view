@@ -4,15 +4,15 @@
 
 ### Goal
 
-We want to automate mapping of tree canopy cover from street level imagery (SLI) to create an informative layer for exploring which areas of a city might be at greater risk during future heat waves and for engaging people in discussions about green and nature-based solutions for climate adaptation. 
+We want to automate mapping of urban vegetation from street level imagery (SLI) to create an informative layer for exploring which areas of a city might be at greater risk during future heat waves and for engaging people in discussions about green and nature-based solutions for climate adaptation. 
+
+The collection and analysis of SLI can be used as part of a citizen science workflow. We hypothesize that a participatory approach to assessing issues like extreme heat hazards from climate change can empower communities by: giving them a greater understanding of the hazards facing their community, building their confidence in designing effective actions to reduce the impacts of those hazards, and strengthening connections between community members.
 
 ### Project inspiration
 
-This project was inspired by the [Treepedia project](https://github.com/mittrees/Treepedia_Public) from [MIT Senseable City Lab](https://senseable.mit.edu/). Treepedia aimed to raise a proactive awareness of urban vegetation improvement, using computer vision techniques applied to Google Street View images. Treepedia measured and mapped the amount of vegetation cover along a city's streets by computing the Green View Index (GVI) on Google Street View (GSV) panoramas. The method considered the obstruction of tree canopies and classified the images accordingly.
+This project was inspired by the [Treepedia project](https://github.com/mittrees/Treepedia_Public) from [MIT Senseable City Lab](https://senseable.mit.edu/). Treepedia aimed to raise a proactive awareness of urban vegetation improvement, using computer vision techniques applied to Google Street View images. Treepedia measured and mapped the amount of vegetation cover along a city's streets by computing the Green View Index (GVI) on Google Street View (GSV) panoramas. Their method considered the obstruction of tree canopies and classified the images accordingly.
 
-We plan to use crowd-sourced, open available imagery uploaded to [Mapillary](https://www.mapillary.com/) instead of GSV panoramas. This will give us greater control over the recency of the images and the geographic coverage of the images, as well as lowering costs. 
-
-Our first workflow will mirror Treepedia's GVI; however, we will explore additional analysis methods including machine learning options that have been developed since 2017 when Treepedia was released.
+We plan to either collect imagery ourselves and use it in a local-only workflow, or we can leverage the crowd-sourced, openly licensed imagery uploaded to [Mapillary](https://www.mapillary.com/). This will give us greater control over the recency of the images and the geographic coverage of the images, and it may lower costs. 
 
 ### Why street level imagery (SLI)?
 
@@ -72,16 +72,16 @@ python -m src.create_points --help
 
 Both the input files and output files support any file formats that geopandas supports, so long as it can correctly infer the format from the file extension. See the [geopandas documentation](https://geopandas.org/en/stable/docs/user_guide/io.html) for more details.
 
-### 2. Download an image for each point
+### 2. Match an image to each point
 
-We want to fetch a 360 image for each sampled point. You can use the [`download_images.py`](./src/download_images.py) script to find the closest image to each point and download it to local file storage.
+We want a 360 image for each of the sampled points. There is more than option for the imagery source, but you have to choose one option. You cannot use multiple sources (at least at this time). You can use the [`assign_images.py`](./src/assign_images.py) script to find the closest image to each point and generate a new file with the data included. The output will have `_images` appended to the filename.
 
 #### Example
 
 For example, if you're continuing from the example in previous steps and already generated a `Three_Rivers_Michigan_USA_points.gpkg` file:
 
 ```bash
-python -m src.download_images data/interim/Three_Rivers_Michigan_USA_points.gpkg data/raw/mapillary
+python -m src.download_images data/interim/Three_Rivers_Michigan_USA_points.gpkg MAPILLARY data/raw/images/Three_Rivers_Michigan_USA/
 ```
 
 ### 3. Assign a Green View score to each image/feature
@@ -101,7 +101,7 @@ This example follows from the files and directories created in previous steps an
 saves an output to a new file. 
 
 ```bash
-python -m src.assign_gvi_to_points /data/raw/mapillary /data/interim/Three_Rivers_Michigan_USA_points.gpkg /data/processed/Three_Rivers_GVI.gpkg
+python -m src.assign_gvi_to_points data/raw/mapillary data/interim/Three_Rivers_Michigan_USA_points_images.gpkg data/processed/Three_Rivers_GVI.gpkg
 ```
 
 ### 4. Visualize the results
