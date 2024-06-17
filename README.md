@@ -129,7 +129,7 @@ We can generate an HTML file that contains javascript to display a web map showi
 
 ```bash
 # python -m src.create_webmap path/to/input_file.gpkg path/to/output/ output_file.html default_zoom_for_webmap 
-python -m src.create_webmap data/processed/Three_Rivers_h3_polygons_10.gpkg /output Three_Rivers_gvi_webmap.html 10
+python -m src.create_webmap data/processed/Three_Rivers_h3_polygons_10.gpkg data/processed Three_Rivers_gvi_webmap.html 10
 ```
 
 
