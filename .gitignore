@@ -1,3 +1,9 @@
+# tmp files
+modules/gvi_segmentation/tmp0.png
+modules/gvi_segmentation/tmp1.png
+modules/gvi_segmentation/tmp2.png
+modules/gvi_segmentation/tmp3.png
+
 # .env file has secrets
 .env
 
