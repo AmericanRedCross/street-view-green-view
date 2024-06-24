@@ -47,6 +47,7 @@ If you are interested in joining the project, please check out [`CONTRIBUTING.md
     - For example, download [`Three_Rivers_Michigan_USA_line.zip`](https://drive.google.com/file/d/1fpI4I5KP2WyVD5PeytW_hoXZswOt0dwA/view?usp=drive_link) to `data/raw/Three_Rivers_Michigan_USA_line.zip`. Note that this Google Drive link is only accessible to approved project members.
 4. Make a copy of the `.env.example` file, removing the `.example` from the end of the filename.
     - To download images from [Mapillary](https://www.mapillary.com/) you will need to create a (free) account and replace `MY_MAPILLARY_CLIENT_TOKEN` in the `.env` file with your own token. See the "Setting up API access and obtaining a client token" section on this [Mapillary help page](https://help.mapillary.com/hc/en-us/articles/360010234680-Accessing-imagery-and-data-through-the-Mapillary-API). You only need to enable READ access scope on your token.
+    - To use OpenStreetMap as a basemap for any webmaps generated, you will need a MapTiler API key. To get a free API key, follow the instructions on [this page](https://docs.maptiler.com/cloud/api/authentication-key/). Once you have an API key, add a new line to your `.env` file: `MAPTILER_API_KEY = "MY_MAPTILER_API_KEY"` - replace the text between the quotes with the key generated on the MapTiler account page. 
 
 ### 1. Sample points from roads data
 
@@ -124,6 +125,8 @@ The larger the number for the [H3 cell resolution](https://h3geo.org/docs/core-l
 #### Generate a web map
 
 We can generate an HTML file that contains javascript to display a web map showing the H3 polygons, styled by the mean GVI score for each polygon.
+
+To display an OpenStreetMap basemap under the data, you will need an API key from [MapTiler](https://www.maptiler.com/), a vector tiles provider. Once you have an API key, add it to your `.env` file (see [Setup section](#0-setup) for how to do this).
 
 ### Example
 
