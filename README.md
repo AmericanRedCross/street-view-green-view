@@ -104,7 +104,21 @@ saves an output to a new file.
 python -m src.assign_gvi_to_points data/raw/mapillary data/interim/Three_Rivers_Michigan_USA_points_images.gpkg data/processed/Three_Rivers_GVI.gpkg
 ```
 
+## Config files
 
+> ![NOTE]
+> Support for config files is a work in progress. We will add config file support progressively to the pipeline steps.  See [Issue #38](https://github.com/AmericanRedCross/street-view-green-view/issues/38) for progress.
+
+All command-line options for the pipeline CLI steps can also be provided in a [TOML-format](https://toml.io/en/) configuration file. An example config file can be found in [`configs/example.toml`](./configs/example.toml).
+
+To use a config file, you can pass a config file using the `--config` option flag. For example, if running `create_points`, you can do:
+
+```bash
+python -m src.create_points \
+    data/raw/Three_Rivers_Michigan_USA_line.zip \
+    data/interim/Three_Rivers_Michigan_USA_points.gpkg \
+    --config configs/example.toml
+```
 
 ## Project Organization
 
