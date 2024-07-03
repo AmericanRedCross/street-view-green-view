@@ -32,6 +32,8 @@ dependencies = [
   "scikit-image",
   "shapely",
   "stamina",
+  "torch",
+  "transformers",
   "tqdm",
   "typer",
 ]
