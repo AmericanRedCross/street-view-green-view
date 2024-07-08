@@ -79,7 +79,9 @@ def main(
     gdf_h3 = gdf.h3.geo_to_h3(cell_resolution).reset_index()
 
     # Aggregate the points to the assigned h3 cell
-    gvi_mean = gdf_h3.groupby("h3_" + f"{cell_resolution:02}").agg({"gvi_score": "mean"})
+    gvi_mean = gdf_h3.groupby("h3_" + f"{cell_resolution:02}").agg(
+        {"gvi_score": "mean"}
+    )
 
     # Convert the h3 cells to polygons
     gvi_hex = gvi_mean.h3.h3_to_geo_boundary()
