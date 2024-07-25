@@ -81,7 +81,7 @@ We want a 360 image for each of the sampled points. There is more than option fo
 For example, if you're continuing from the example in previous steps and already generated a `Three_Rivers_Michigan_USA_points.gpkg` file:
 
 ```bash
-python -m src.download_images data/interim/Three_Rivers_Michigan_USA_points.gpkg MAPILLARY data/raw/images/Three_Rivers_Michigan_USA/
+python -m src.assign_images data/interim/Three_Rivers_Michigan_USA_points.gpkg MAPILLARY data/raw/images/Three_Rivers_Michigan_USA/
 ```
 
 ### 3. Assign a Green View score to each image/feature
@@ -138,7 +138,7 @@ python -m src.create_points \
     └── src                            <- Source code for use in this project.
         └── __init__.py                <- Makes src a Python module
         └── create_points.py           <- Creates a list of points along the roads of an area
-        └── download_images.py         <- Downloads images from the list of points
+        └── assign_images.py           <- Matches images to the list of points (downloading or from local)
         └── assign_gvi_to_points.py    <- Calculates a Green View Index (GVI) from the images
 
 --------
