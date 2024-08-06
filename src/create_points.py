@@ -96,6 +96,8 @@ def create_points(gdf: gpd.GeoDataFrame, mini_dist: float = DEFAULT_MINI_DIST):
             "Input GeoDataFrame contains null geometries. "
             "Rerun with --drop-null to exclude these features."
         )
+    if (gdf.geom_type == "MultiLineString").any():
+        gdf = gdf.explode()
     if not (gdf.geom_type == "LineString").all():
         raise ValueError("Input GeoDataFrame must contain only LineString features.")
     # Drop metadata other than 'osm_id'
