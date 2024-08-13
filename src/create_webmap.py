@@ -1,5 +1,6 @@
 import os
 from pathlib import Path
+from dotenv import load_dotenv
 
 import geopandas as gpd
 from jinja2 import Environment, FileSystemLoader
@@ -79,6 +80,7 @@ def main(
     )
 
     # Load API key for map tiles from environment variable
+    load_dotenv()
     maptiler_api_key = os.getenv("MAPTILER_API_KEY")
 
     # Lookup the colourmap values for each GVI score
