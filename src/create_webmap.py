@@ -29,13 +29,9 @@ def main(
         Path,
         typer.Argument(help="Path to file containing h3 polygons."),
     ],
-    output_dir: Annotated[
-        Path,
-        typer.Argument(help="Folder to save output HTML file to."),
-    ],
     filename: Annotated[
-        str, typer.Argument(help="(Optional) Filename for HTML output file.")
-    ] = "gvi_webmap.html",
+        str, typer.Argument(help="(Optional) Path to file for HTML output.")
+    ] = "./data/processed/gvi_webmap.html",
     zoom_level: Annotated[
         int,
         typer.Argument(
@@ -135,7 +131,7 @@ def main(
 
     # Generate the HTML file from the template, filling dynamic values
     with open(
-        os.path.join(output_dir, filename), mode="w", encoding="utf-8"
+        filename, mode="w", encoding="utf-8"
     ) as message:
         message.write(
             template.render(
