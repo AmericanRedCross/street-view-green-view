@@ -131,8 +131,8 @@ To display an OpenStreetMap basemap under the data, you will need an API key fro
 ### Example
 
 ```bash
-# python -m src.create_webmap path/to/input_file.gpkg path/to/output/ output_file.html default_zoom_for_webmap 
-python -m src.create_webmap data/processed/Three_Rivers_h3_polygons_10.gpkg data/processed Three_Rivers_gvi_webmap.html 10
+# python -m src.create_webmap path/to/input_file.gpkg path/to/output/output_file.html default_zoom_for_webmap 
+python -m src.create_webmap data/processed/Three_Rivers_h3_polygons_10.gpkg data/processed/Three_Rivers_gvi_webmap.html 10
 ```
 
 
