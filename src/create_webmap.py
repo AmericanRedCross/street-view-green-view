@@ -77,7 +77,14 @@ def main(
 
     # Load API key for map tiles from environment variable
     load_dotenv()
-    maptiler_api_key = os.getenv("MAPTILER_API_KEY")
+    
+    if "MAPTILER_API_KEY" in os.environ: 
+        maptiler_api_key = os.getenv("MAPTILER_API_KEY")
+    else:
+        maptiler_api_key = "None"
+    
+    if maptiler_api_key == "MY_MAPTILER_API_KEY":
+        maptiler_api_key = "None"        
 
     # Lookup the colourmap values for each GVI score
     cmap = matplotlib.colormaps["viridis"]
