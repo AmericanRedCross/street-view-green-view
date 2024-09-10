@@ -4,6 +4,7 @@ import shutil
 import geopandas as gpd
 import numpy as np
 import pytest
+from pathlib import Path
 from shapely import LineString, MultiPoint, geometry
 from typer.testing import CliRunner
 
@@ -14,7 +15,6 @@ from src.create_points import (
     create_points,
     filter_by_highway_type,
     interpolate_along_line,
-    main,
 )
 
 runner = CliRunner(mix_stderr=False)
@@ -46,8 +46,8 @@ def test_filter_by_highway_type():
 
 
 def test_interpolate_along_line():
-    test_line = LineString([[-9532658.679, 5154379.822], [-9534693.722, 5154037.319]])
-    test_dist = 20
+    test_line = LineString(np.random.rand(2, 2))
+    test_dist = 0.2
     new_coords = interpolate_along_line(test_line, test_dist)
     assert isinstance(new_coords, MultiPoint)
     assert len(new_coords.geoms) == int(test_line.length / test_dist)
@@ -57,7 +57,7 @@ def test_interpolate_along_line():
 def test_create_points_error(invalid_value):
     test_df = gpd.read_file("tests/assets/test_gdf.shp").head()
     test_df.loc[0, "geometry"] = invalid_value
-    with pytest.raises(Exception):
+    with pytest.raises(ValueError):
         create_points(test_df, 20)
 
 
@@ -78,11 +78,18 @@ def test_create_points():
     ],
 )
 def test_main(mini_dist, drop_null, highway_types):
-    os.mkdir("tests/tmp")
+    Path("tests/tmp").mkdir(exist_ok=True)
     in_filepath = "tests/assets/test_gdf.shp"
     out_filepath = "tests/tmp/test_gdf_out.shp"
 
-    main(in_filepath, out_filepath, mini_dist, drop_null, highway_types)
+    args = [
+        in_filepath, out_filepath, "--mini-dist", mini_dist, "--highway-type", highway_types
+    ]
+
+    if drop_null:
+        args.append("--drop-null")
+
+    runner.invoke(app, args)
     output_gdf = gpd.read_file(out_filepath)
 
     assert output_gdf.crs == "EPSG:4326"
