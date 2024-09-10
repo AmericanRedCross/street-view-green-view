@@ -1,10 +1,9 @@
-import os
+from pathlib import Path
 import shutil
 
 import geopandas as gpd
 import numpy as np
 import pytest
-from pathlib import Path
 from shapely import LineString, MultiPoint, geometry
 from typer.testing import CliRunner
 
@@ -83,7 +82,12 @@ def test_main(mini_dist, drop_null, highway_types):
     out_filepath = "tests/tmp/test_gdf_out.shp"
 
     args = [
-        in_filepath, out_filepath, "--mini-dist", mini_dist, "--highway-type", highway_types
+        in_filepath,
+        out_filepath,
+        "--mini-dist",
+        mini_dist,
+        "--highway-type",
+        highway_types,
     ]
 
     if drop_null:
