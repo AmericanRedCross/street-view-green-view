@@ -83,7 +83,7 @@ def main(
     else:
         maptiler_api_key = "None"
     
-    if maptiler_api_key == "MY_MAPTILER_API_KEY":
+    if maptiler_api_key in ["MY_MAPTILER_API_KEY", ""]:
         maptiler_api_key = "None"        
 
     # Lookup the colourmap values for each GVI score
