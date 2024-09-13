@@ -35,6 +35,7 @@ dependencies = [
   "stamina",
   "tqdm",
   "typer",
+  "typer-config",
 ]
 
 ## TOOLS ##
