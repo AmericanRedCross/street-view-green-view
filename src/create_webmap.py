@@ -1,7 +1,7 @@
 import os
 from pathlib import Path
-from dotenv import load_dotenv
 
+from dotenv import load_dotenv
 import geopandas as gpd
 from jinja2 import Environment, FileSystemLoader
 import matplotlib
