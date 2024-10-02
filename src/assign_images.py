@@ -97,7 +97,7 @@ def main(
     log.info(gdf.head())
     log.info(
         "Are There Duplicates? {}",
-        gdf[gdf["image_id"] is not None and gdf["image_id"] != np.NaN]["image_id"]
+        gdf[gdf["image_id"] is not None and gdf["image_id"] != np.nan]["image_id"]
         .duplicated()
         .any(),
     )
