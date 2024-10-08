@@ -5,7 +5,6 @@ from typing import Annotated
 
 import geopandas as gpd
 from loguru import logger as log
-import numpy as np
 from pandas import Series
 from requests.exceptions import HTTPError
 from tenacity import RetryError
