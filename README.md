@@ -88,7 +88,7 @@ python -m src.assign_images data/interim/Three_Rivers_Michigan_USA_points.gpkg M
 
 Now that we have a point feature for each image, we want to calculate a Green View 
 Index (GVI) score for each image and assign that score to the relevant point feature. 
-We can use the [`assign_gvi_to_points.py`]('./src/assign_gvi_to_points.py') script 
+We can use the [`assign_gvi_to_points.py`](./src/assign_gvi_to_points.py) script 
 for this. 
 
 For more information on how GVI is calculated, see Li et al. (2015), 
