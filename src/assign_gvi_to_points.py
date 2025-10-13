@@ -49,7 +49,7 @@ def get_gvi_score(image_path):
     # Calculate the Green View Index (GVI)
     gvi_score = (green_pixels / total_pixels) * 100
 
-    return gvi_score
+    return float(f"{gvi_score:.6f}")
 
 
 @app.command()
@@ -109,9 +109,12 @@ def main(
 
         temp_df = pd.DataFrame({"filename": [i], "gvi_score": [gvi_score]})
 
-        print(i, "\t", str(gvi_score))
+        print(i, "\t", f"{gvi_score:.6f}")
 
         df = pd.concat([df, temp_df], ignore_index=True)
+        
+    df["gvi_score"] = pd.to_numeric(df["gvi_score"], errors="coerce").round(6)
+
 
     # Create an image ID from the file name, to match to the point dataset
     df["image_id"] = df["filename"].str[:-5]
@@ -125,6 +128,8 @@ def main(
     # Print how many records were matched on each side
 
     # Export as GPKG
+    gdf["gvi_score"] = pd.to_numeric(gdf["gvi_score"], errors="coerce").round(6)
+
     gdf.to_file(output_file)
 
 
